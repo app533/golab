@@ -10,7 +10,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'npm install -g sonarqube-scanner'
+                  
                     sh 'sonar-scanner -Dsonar.projectKey=nosee -Dsonar.sources=. -Dsonar.host.url=http://44.202.195.71:9000 -Dsonar.login=squ_68395f3afacdc0fdbe0a0f89c7f3983eda9745eb'
                 }
             }
