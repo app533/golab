@@ -14,7 +14,7 @@ stages {
        def scannerHome = tool 'SonarQube';
            withSonarQubeEnv("SonarQube") {
            sh "${tool("SonarQube")}/bin/sonar-scanner \
-           -Dsonar.projectKey=ok \
+           -Dsonar.projectKey=oksee \
            -Dsonar.sources=. \
            -Dsonar.css.node=. \
            -Dsonar.host.url=http://44.202.195.71:9000\
