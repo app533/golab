@@ -6,13 +6,20 @@ pipeline {
         checkout scm
       }
     }
+    stage("Code Checkout from GitLab") {
+  steps {
+   git branch: 'main',
+    credentialsId: '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',
+    url: 'https://github.com/app533/golab'
+  }
+ }
     stage('Code Quality Check via SonarQube') {
    steps {
        script {
-       def scannerHome = tool 'SonarQube';
+       def scannerHome = tool 'sonarqube';
            withSonarQubeEnv("SonarQube") {
-           sh "${tool("SonarQube")}/bin/sonar-scanner \
-           -Dsonar.projectKey=oknew \
+           sh "${tool("sonarqube")}/bin/sonar-scanner \
+           -Dsonar.projectKey=neforjavapro \
            -Dsonar.sources=. \
            -Dsonar.css.node=. \
            -Dsonar.host.url=http://44.202.195.71:9000\
