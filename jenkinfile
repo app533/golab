@@ -6,12 +6,20 @@ pipeline {
         checkout scm
       }
     }
-    stage('SonarQube Analysis') {
-      steps {
-        withSonarQubeEnv('SonarQube') {
-         sh 'sonar-scanner -D"sonar.projectKey=neforjavapro" -D"sonar.sources=." -D"sonar.host.url=http://44.202.195.71:9000" -D"sonar.token=squ_68395f3afacdc0fdbe0a0f89c7f3983eda9745eb"'
-        }
-      }
-    }
+    stage('Code Quality Check via SonarQube') {
+   steps {
+       script {
+       def scannerHome = tool 'sonarqube';
+           withSonarQubeEnv("SonarQube") {
+           sh "${tool("sonarqube")}/bin/sonar-scanner \
+           -Dsonar.projectKey=neforjavapro \
+           -Dsonar.sources=. \
+           -Dsonar.css.node=. \
+           -Dsonar.host.url=http://44.202.195.71:9000\
+           -Dsonar.login=squ_68395f3afacdc0fdbe0a0f89c7f3983eda9745eb"
+               }
+           }
+       }
+   }
   }
 }
