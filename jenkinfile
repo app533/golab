@@ -1,6 +1,5 @@
 pipeline {
 agent any
-tools {server.js "nodenv"}
 stages {
  stage("Code Checkout from GitLab") {
   steps {
