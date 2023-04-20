@@ -1,13 +1,8 @@
+
 pipeline {
 agent any
 stages {
- stage("Code Checkout from GitLab") {
-  steps {
-   git branch: 'main',
-    credentialsId: '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',
-    url: 'https://github.com/app533/golab'
-  }
- }
+ 
    stage('Sonarqube') {
     environment {
         scannerHome = tool 'SonarQube'
