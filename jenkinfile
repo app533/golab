@@ -1,25 +1,21 @@
 pipeline {
-  agent any
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
-    stage("Code Checkout from GitLab") {
+agent any
+tools {nodejs "nodenv"}
+stages {
+ stage("Code Checkout from GitLab") {
   steps {
    git branch: 'main',
     credentialsId: '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',
     url: 'https://github.com/app533/golab'
   }
  }
-    stage('Code Quality Check via SonarQube') {
+   stage('Code Quality Check via SonarQube') {
    steps {
        script {
        def scannerHome = tool 'SonarQube';
            withSonarQubeEnv("SonarQube") {
            sh "${tool("SonarQube")}/bin/sonar-scanner \
-           -Dsonar.projectKey=jn \
+           -Dsonar.projectKey=ok \
            -Dsonar.sources=. \
            -Dsonar.css.node=. \
            -Dsonar.host.url=http://44.202.195.71:9000\
@@ -28,5 +24,12 @@ pipeline {
            }
        }
    }
-  }
+   stage("Install Project Dependencies") {
+   steps {
+       nodejs(nodeJSInstallationName: 'nodenv'){
+           sh "npm install"
+           }
+       }
+   }
+}
 }
