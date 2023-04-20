@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/app533/golab.git']]])
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'npm install -g sonarqube-scanner'
+                    sh 'sonar-scanner -Dsonar.projectKey=nosee -Dsonar.sources=. -Dsonar.host.url=http://44.202.195.71:9000 -Dsonar.login=squ_68395f3afacdc0fdbe0a0f89c7f3983eda9745eb'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'npm run deploy'
+            }
+        }
+    }
+}
