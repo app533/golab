@@ -8,20 +8,18 @@ stages {
     url: 'https://github.com/app533/golab'
   }
  }
-   stage('Code Quality Check via SonarQube') {
-   steps {
-       script {
-       def scannerHome = tool 'SonarQube';
-           withSonarQubeEnv("SonarQube") {
-           sh "${tool("SonarQube")}/bin/sonar-scanner \
-           -Dsonar.projectKey=oksee \
-           -Dsonar.sources=. \
-           -Dsonar.css.node=. \
-           -Dsonar.host.url=http://44.202.195.71:9000\
-           -Dsonar.login=squ_68395f3afacdc0fdbe0a0f89c7f3983eda9745eb"
-               }
-           }
-       }
-   }
+   stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'SonarQube'
+    }
+    steps {
+        withSonarQubeEnv('sonarqube') {
+            sh "${SonarQube}/bin/sonar-scanner"
+        }
+        timeout(time: 10, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
+    }
+}
 }
 }
