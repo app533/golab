@@ -2,7 +2,9 @@ pipeline {
   agent any
   stages {
     stage('Checkout') {
-      git 'https://github.com/app533/foronar.git'
+      steps {
+        checkout scm
+      }
     }
     stage('SonarQube Analysis') {
       steps {
